@@ -103,7 +103,6 @@ def calculate_minervini_rs(equity_df):
 def post_to_blogger(title, html_content):
     """
     환경 변수에 등록된 인증 정보를 바탕으로 구글 블로그에 자동 포스팅합니다.
-    개발 단계(인증 정보 없음)에서는 포스팅을 건너뜁니다.
     """
     blog_id = os.environ.get('BLOGGER_BLOG_ID')
     client_id = os.environ.get('BLOGGER_CLIENT_ID')
@@ -116,7 +115,6 @@ def post_to_blogger(title, html_content):
 
     print("🚀 [배포 모드] 구글 블로그(Blogger) 자동 포스팅을 시작합니다...")
     try:
-        # OAuth 2.0 자격 증명 생성
         creds = Credentials(
             token=None,
             refresh_token=refresh_token,
@@ -132,7 +130,6 @@ def post_to_blogger(title, html_content):
             "content": html_content
         }
         
-        # 블로그에 글 게시 (isDraft=False 로 설정하여 즉시 발행)
         posts = service.posts()
         res = posts.insert(blogId=blog_id, body=body, isDraft=False).execute()
         print(f"✅ 구글 블로그 포스팅 성공! 링크: {res.get('url')}")
@@ -160,13 +157,26 @@ def export_data(df, bm_1m, bm_3m, bm_1y):
     today_date = datetime.now().strftime('%Y-%m-%d')
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M')
     
-    table_html = html_df.to_html(index=False, classes='etf-table', border=0, escape=False)
-    post_title = f"주식형 ETF 상대강도 모멘텀 랭킹({today_date})"
+    table_html = html_df.to_html(index=False, classes='etf-table', border=0, escape=False, justify='center')
     
-    # 💡 SEO 최적화를 위해 시맨틱 태그 구조를 갖춘 포스팅용 HTML 본문
+    # [수정포인트] 포스팅 제목 맨 앞에 로켓 아이콘 추가
+    post_title = f"🚀 주식형 ETF 상대강도 모멘텀 랭킹({today_date})"
+    
     html_content = f"""
     <div class="etf-container" style="font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 100%; overflow-x: auto; margin-bottom: 30px;">
-        <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; font-size: 1.5em;">📊 {post_title}</h2>
+        <style>
+            /* 테이블 전체 윤곽 및 셀 테두리 연하게 설정 */
+            .etf-table {{ width: 100%; border-collapse: collapse; background-color: #ffffff; font-size: 0.9em; border: 1px solid #e0e0e0; }}
+            /* 헤더 및 본문 기본 중앙 정렬, 상하 가운데 정렬, 테두리 추가 */
+            .etf-table th, .etf-table td {{ padding: 10px 12px; border: 1px solid #e0e0e0; text-align: center; vertical-align: middle; }}
+            .etf-table th {{ background-color: #f8f9fa; color: #2c3e50; font-weight: 600; white-space: nowrap; }}
+            /* 두 번째 열(종목명)만 예외적으로 왼쪽 정렬 */
+            .etf-table td:nth-child(2) {{ text-align: left; }}
+            .etf-table tr:hover {{ background-color: #f1f4f8; }}
+            .etf-table a:hover {{ text-decoration: underline !important; color: #2980b9 !important; }}
+        </style>
+        
+        <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; font-size: 1.5em;">{post_title}</h2>
         <div class="description" style="font-size: 0.95em; color: #7f8c8d; margin-bottom: 15px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; border-left: 4px solid #3498db;">
             <strong>💡 마크 미너비니 상대강도 (IBD RS Rating)</strong><br>
             최근 1년간의 가중 수익률(최근 3개월 40% 비중)을 전체 ETF 내에서 1~99점의 백분위 순위로 매긴 값입니다. (80점 이상 붉은색 강조 처리)<br><br>
@@ -177,7 +187,6 @@ def export_data(df, bm_1m, bm_3m, bm_1y):
     </div>
     """
 
-    # 개발 단계 확인용 로컬 파일 저장
     with open('minervini_rs_etf_list.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
         
