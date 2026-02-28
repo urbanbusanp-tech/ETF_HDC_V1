@@ -2,7 +2,7 @@ name: Update ETF Data
 
 on:
   schedule:
-    - cron: '10 7 * * 1-5'
+    - cron: '0 8 * * 1-5'
   workflow_dispatch: 
 
 permissions:
@@ -15,11 +15,13 @@ jobs:
     steps:
       - name: 저장소 체크아웃
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 파일 병합(pull)을 위해 전체 기록을 가져옵니다.
 
       - name: 파이썬 환경 설정
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11' # 파이썬 구버전 경고 해결을 위해 3.11로 상향
 
       - name: 패키지 설치
         run: |
@@ -27,17 +29,18 @@ jobs:
           pip install -r requirements.txt
 
       - name: 데이터 업데이트 스크립트 실행 및 블로그 포스팅
-        env: # GitHub Secrets에 저장된 구글 API 키들을 코드로 전달합니다.
+        env: 
           BLOGGER_BLOG_ID: ${{ secrets.BLOGGER_BLOG_ID }}
           BLOGGER_CLIENT_ID: ${{ secrets.BLOGGER_CLIENT_ID }}
           BLOGGER_CLIENT_SECRET: ${{ secrets.BLOGGER_CLIENT_SECRET }}
           BLOGGER_REFRESH_TOKEN: ${{ secrets.BLOGGER_REFRESH_TOKEN }}
         run: python update_data.py
 
-      - name: 생성된 CSV 파일 깃허브에 자동 커밋 & 푸시
+      - name: 생성된 파일 깃허브에 자동 커밋 & 푸시
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add etf_data.csv minervini_rs_etf_list.html
           git commit -m "Auto-update ETF data & Blogger post" || exit 0
+          git pull origin main --rebase # 충돌 방지: 온라인의 최신 상태를 먼저 가져와서 합침
           git push
