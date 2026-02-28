@@ -164,8 +164,6 @@ def export_data(df, bm_1m, bm_3m, bm_1y):
             .etf-table tr:hover {{ background-color: #f1f4f8; }}
         </style>
         
-        <h2 style="color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 25px;">🚀 주식형 ETF 상대강도 모멘텀 랭킹 ({today_date})</h2>
-
         <h3>💡 개요: 시장 주도주를 찾는 모멘텀 분석</h3>
         <div class="content-block">
             <p>본 리포트는 대한민국 상장 주식형 ETF 중 현재 가장 강력한 상승 에너지를 보여주는 종목을 선별합니다. 단순 가격 상승률을 넘어 시장 대비 초과 수익을 내는 '진짜 주도주'를 확인하여 전략적 자산배분의 기초 자료로 활용해 보세요.</p>
@@ -203,3 +201,4 @@ if __name__ == "__main__":
     equity_df = get_equity_etfs()
     rs_df, bm_1m, bm_3m, bm_1y = calculate_minervini_rs(equity_df)
     export_data(rs_df, bm_1m, bm_3m, bm_1y)
+
