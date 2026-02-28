@@ -1,15 +1,27 @@
 
     <div class="etf-container" style="font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 100%; overflow-x: auto; margin-bottom: 30px;">
-        <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; font-size: 1.5em;">📊 주식형 ETF 상대강도 모멘텀 랭킹(2026-02-28)</h2>
+        <style>
+            /* 테이블 전체 윤곽 및 셀 테두리 연하게 설정 */
+            .etf-table { width: 100%; border-collapse: collapse; background-color: #ffffff; font-size: 0.9em; border: 1px solid #e0e0e0; }
+            /* 헤더 및 본문 기본 중앙 정렬, 상하 가운데 정렬, 테두리 추가 */
+            .etf-table th, .etf-table td { padding: 10px 12px; border: 1px solid #e0e0e0; text-align: center; vertical-align: middle; }
+            .etf-table th { background-color: #f8f9fa; color: #2c3e50; font-weight: 600; white-space: nowrap; }
+            /* 두 번째 열(종목명)만 예외적으로 왼쪽 정렬 */
+            .etf-table td:nth-child(2) { text-align: left; }
+            .etf-table tr:hover { background-color: #f1f4f8; }
+            .etf-table a:hover { text-decoration: underline !important; color: #2980b9 !important; }
+        </style>
+        
+        <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; font-size: 1.5em;">🚀 주식형 ETF 상대강도 모멘텀 랭킹(2026-02-28)</h2>
         <div class="description" style="font-size: 0.95em; color: #7f8c8d; margin-bottom: 15px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; border-left: 4px solid #3498db;">
             <strong>💡 마크 미너비니 상대강도 (IBD RS Rating)</strong><br>
             최근 1년간의 가중 수익률(최근 3개월 40% 비중)을 전체 ETF 내에서 1~99점의 백분위 순위로 매긴 값입니다. (80점 이상 붉은색 강조 처리)<br><br>
-            * <strong>업데이트 일시:</strong> 2026-02-28 14:40 (분석 종목: 571개)<br>
+            * <strong>업데이트 일시:</strong> 2026-02-28 14:57 (분석 종목: 571개)<br>
             * <strong>벤치마크(KODEX 200):</strong> 1개월(26.00%), 3개월(72.55%), 1년(184.98%)
         </div>
         <table class="dataframe etf-table">
   <thead>
-    <tr style="text-align: right;">
+    <tr style="text-align: center;">
       <th>종목코드</th>
       <th>종목명</th>
       <th>현재가(원)</th>
